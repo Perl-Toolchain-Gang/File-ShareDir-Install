@@ -20,32 +20,6 @@ our @ISA = qw( Exporter);
 our @EXPORT = qw( postamble install_share );
 
 #####################################################################
-sub install_shareXXX
-{
-    warn "init_dirscan";
-    my $self = shift;
-    if( $self->{SHARE} ) {
-        my $S = $self->{SHARE};
-        my $r = ref $S;
-        unless( $r ) {
-            share_dir( $S );
-        }
-        elsif( 'ARRAY' eq $r ) {
-            foreach my $dir ( @{ $S } ) {
-                share_dir( $dir );
-            }
-        }
-        elsif( 'HASH' eq $r ) {
-            foreach my $dir ( keys %{ $S } ) {
-                share_dir( $dir, ref $S->{$dir} ? @{ $S->{$dir} } 
-                                                       : $S->{$dir} );
-            }
-        }
-    }
-    # return $self->SUPER::init_dirscan();
-}
-
-#####################################################################
 sub install_share
 {
     my $dir  = @_ ? pop : 'share';
@@ -57,9 +31,10 @@ sub install_share
         confess "Illegal or missing directory '$dir'";
     }
 
-    if( $type eq 'dist' ) {
-        confess "Too many parameters to share_dir" if @_;
+    if( $type eq 'dist' and @_ ) {
+        confess "Too many parameters to share_dir";
     }
+
     push @DIRS, $dir;
     $TYPES{$dir} = [ $type ];
     if( $type eq 'module' ) {
@@ -91,16 +66,13 @@ sub postamble_share_dir
 
     my( $idir );
     if ( $type eq 'dist' ) {
-
         $idir = File::Spec->catdir( '$(INST_LIB)', 
                                     qw( auto share dist ), 
                                     '$(DISTNAME)'
                                   );
-
     } else {
         my $module = $mod;
         $module =~ s/::/-/g;
-
         $idir = File::Spec->catdir( '$(INST_LIB)', 
                                     qw( auto share module ), 
                                     $module
@@ -122,11 +94,7 @@ CODE
 #    use Data::Dumper;
 #    die Dumper $files;
     # Set up the install
-    return <<"END_MAKEFILE";
-config ::
-$r
-
-END_MAKEFILE
+    return "config::\n$r";
 }
 
 
@@ -165,41 +133,54 @@ __END__
 
 =head1 NAME
 
-File::Sharedir::Install - Perl extension for blah blah blah
+File::Sharedir::Install - Install shared files
 
 =head1 SYNOPSIS
 
-  use File::Sharedir::Install;
-  blah blah blah
+    use ExtUtils::MakeMaker;
+    WriteMakefile( ... );
+
+    package MY;
+    use File::Sharedir::Install;
+
+    sub init_dirscan
+    {
+        my( $self ) = @_;
+        install_share 'share';
+        install_share dist => 'dist-share';
+        install_share module => 'My::Module' => 'other-share';
+        shift->SUPER::init_dirscan( @_ );
+    }
 
 =head1 DESCRIPTION
 
-Stub documentation for File::Sharedir::Install, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+File::ShareDir::Install allows you to install read-only data files from a
+distribution. It is a companion module to L<File::ShareDir>, which
+allows you to locate these files after installation.
 
-Blah blah blah.
+It is a port L<Module::Install::Share> to L<ExtUtils::MakeMaker> with the
+improvement only installing the files you want; C<.svn> and
+other source-control junk will be ignored.
 
-=head2 EXPORT
+=head1 EXPORT
 
-None by default.
+=head2 install_share
+
+    install_share $dir;
+    install_share dist => $dir;
+    install_share module => $module, $dir;
+
+=head2 postamble
 
 
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
+L<File::Sharedir>, L<Module::Install>.
 
 =head1 AUTHOR
 
-Philip Gwyn, E<lt>fil@localdomainE<gt>
+Philip Gwyn, E<lt>gwyn-AT-cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

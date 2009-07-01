@@ -5,6 +5,9 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'File::Sharedir::Install',
     VERSION_FROM      => 'lib/File/Sharedir/Install.pm', # finds $VERSION
+    LICENSE           => 'perl',
+    dist=>{COMPRESS=>'gzip -9f', EXT=>'gz'},
+
     PREREQ_PM         => {
             'ExtUtils::MakeMaker' => '6.11',
             'IO::Dir' => 0,
@@ -12,5 +15,5 @@ WriteMakefile(
         }, 
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/File/Sharedir/Install.pm', # retrieve abstract from module
-       AUTHOR         => 'Philip Gwyn <fil@localdomain>') : ()),
+       AUTHOR         => 'Philip Gwyn <gwyn-at-cpan.org>') : ()),
 );
