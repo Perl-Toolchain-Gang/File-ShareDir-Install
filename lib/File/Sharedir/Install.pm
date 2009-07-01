@@ -17,7 +17,8 @@ our %TYPES;
 require Exporter;
 
 our @ISA = qw( Exporter);
-our @EXPORT = qw( postamble install_share );
+our @EXPORT = qw( install_share );
+our @EXPORT_OK = qw( postamble install_share );
 
 #####################################################################
 sub install_share
@@ -138,19 +139,16 @@ File::Sharedir::Install - Install shared files
 =head1 SYNOPSIS
 
     use ExtUtils::MakeMaker;
-    WriteMakefile( ... );
-
-    package MY;
     use File::Sharedir::Install;
 
-    sub init_dirscan
-    {
-        my( $self ) = @_;
-        install_share 'share';
-        install_share dist => 'dist-share';
-        install_share module => 'My::Module' => 'other-share';
-        shift->SUPER::init_dirscan( @_ );
-    }
+    install_share 'share';
+    install_share dist => 'dist-share';
+    install_share module => 'My::Module' => 'other-share';
+
+    WriteMakefile( ... );       # As you normaly would
+
+    package MY;
+    use File::Sharedir::Install qw(postamble);
 
 =head1 DESCRIPTION
 
@@ -176,7 +174,7 @@ Exported into the MY package.  Only documented here if you need to write your
 own postable.
 
     package MY;
-    use File::Sharedir::Install qw(install_share);
+    use File::Sharedir::Install;
 
     sub postamble {
         my $self = shift;

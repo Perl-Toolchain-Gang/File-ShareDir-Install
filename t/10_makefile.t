@@ -87,5 +87,5 @@ sub mysystem
 ###########################################################################
 package MY;
 
-use File::Sharedir::Install;
+use File::Sharedir::Install qw(postamble);
 
