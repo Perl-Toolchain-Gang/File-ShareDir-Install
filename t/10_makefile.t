@@ -12,17 +12,20 @@ use ExtUtils::MakeMaker;
 my $FILE = 'test-Makefile';
 # END { $FILE and -f $FILE and unlink $FILE }
 
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
+use File::Sharedir::Install;
+
+install_share 't/share';
+install_share module => 'My::Test' => 't/module';
+
 WriteMakefile(
     NAME              => 'File::Sharedir::Install',
-    VERSION_FROM      => 'lib/File/Sharedir/Install.pm', # finds $VERSION
+    VERSION_FROM      => 'lib/File/Sharedir/Install.pm',
     INST_LIB          => 'tlib/lib',
     PREFIX            => 'troot',
     MAKEFILE          => $FILE,
     PREREQ_PM         => {},
-    ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM  => 'lib/File/Sharedir/Install.pm', # retrieve abstract fr
+    ($] >= 5.005 ?     
+      (ABSTRACT_FROM  => 'lib/File/Sharedir/Install.pm', 
        AUTHOR         => 'Philip Gwyn <fil@localdomain>') : ()),
 );
 
@@ -85,12 +88,4 @@ sub mysystem
 package MY;
 
 use File::Sharedir::Install;
-
-sub init_dirscan
-{
-    my( $self ) = @_;
-    install_share 't/share';
-    install_share module => 'My::Test' => 't/module';
-    shift->SUPER::init_dirscan( @_ );
-}
 
