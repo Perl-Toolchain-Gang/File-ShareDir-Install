@@ -8,4 +8,6 @@ t/module/deeper/bonk
 t/module/bonk
 t/share/honk
 t/00_compile.t
+t/01_pod.t
+t/02_pod_coverage.t
 t/10_makefile.t

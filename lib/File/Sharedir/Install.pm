@@ -54,13 +54,13 @@ sub postamble
 
     my @ret; # = $self->SUPER::postamble( @_ );
     foreach my $dir ( @DIRS ) {
-        push @ret, postamble_share_dir( $self, $dir, @{ $TYPES{ $dir } } );
+        push @ret, __postamble_share_dir( $self, $dir, @{ $TYPES{ $dir } } );
     }
     return join "\n", @ret;
 }
 
 #####################################################################
-sub postamble_share_dir
+sub __postamble_share_dir
 {
     my( $self, $dir, $type, $mod ) = @_;
 
@@ -172,7 +172,18 @@ other source-control junk will be ignored.
 
 =head2 postamble
 
+Exported into the MY package.  Only documented here if you need to write your
+own postable.
 
+    package MY;
+    use File::Sharedir::Install qw(install_share);
+
+    sub postamble {
+        my $self = shift;
+        my @ret = File::Sharedir::Install::postamble( $self );
+        # ... add more things to @ret;
+        return join "\n", @ret;
+    }
 
 =head1 SEE ALSO
 
