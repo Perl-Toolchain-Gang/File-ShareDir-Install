@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Config;
+
+use Test::More ( tests => 15 );
+
+use ExtUtils::MakeMaker;
+
+my $FILE = 'test-Makefile';
+# END { $FILE and -f $FILE and unlink $FILE }
+
+# See lib/ExtUtils/MakeMaker.pm for details of how to influence
+# the contents of the Makefile that is written.
+WriteMakefile(
+    NAME              => 'File::Sharedir::Install',
+    VERSION_FROM      => 'lib/File/Sharedir/Install.pm', # finds $VERSION
+    INST_LIB          => 'tlib/lib',
+    PREFIX            => 'troot',
+    MAKEFILE          => $FILE,
+    PREREQ_PM         => {},
+    ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
+      (ABSTRACT_FROM  => 'lib/File/Sharedir/Install.pm', # retrieve abstract fr
+       AUTHOR         => 'Philip Gwyn <fil@localdomain>') : ()),
+);
+
+sub slurp
+{
+    local @ARGV = @_;
+    local $/;
+    local $.;
+    <>;
+};
+
+
+#####
+ok( -f $FILE, "Created $FILE" );
+my $content = slurp $FILE;
+ok( $content =~ m(t.share.honk.+share.dist...DISTNAME..honk), "Shared by dist" );
+ok( $content =~ m(t.module.bonk.+share.module.My-Test.bonk), "Shared by module" );
+ok( $content =~ m(t.module.again.+share.module.My-Test.again), "Shared by module again" );
+ok( $content =~ m(t.module.deeper.bonk.+share.module.My-Test.deeper.bonk), "Shared by module in subdirectory" );
+
+#####
+mysystem( $Config{make}, '-f', $FILE );
+my $TOP = "tlib/lib/auto/share";
+ok( -f "$TOP/dist/File-Sharedir-Install/honk", "Copied to blib for dist" );
+ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
+ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
+ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );
+
+my $c = slurp "$TOP/module/My-Test/bonk";
+is( $c, "bonk\n", "Same names" );
+$c = slurp "$TOP/module/My-Test/deeper/bonk";
+is( $c, "deeper\n", " ... not mixed up" );
+
+#####
+mysystem( $Config{make}, '-f', $FILE, 'install' );
+unless( $content =~ m(INSTALLSITELIB = (.+)) ) {
+    SKIP: {
+        skip "Can't find INSTALLSITELIB in test-Makefile", 4;
+    }
+}
+else {
+    $TOP = "$1/auto/share";
+    $TOP =~ s/\$\(SITEPREFIX\)/troot/;
+    ok( -f "$TOP/dist/File-Sharedir-Install/honk", "Copied to blib for dist" );
+    ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
+    ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
+    ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );
+}
+
+#####################################
+sub mysystem
+{
+    my $cmd = join ' ', @_;
+    my $ret = qx($cmd 2>&1);
+    return unless $?;
+    die $ret;
+}
+
+###########################################################################
+package MY;
+
+use File::Sharedir::Install;
+
+sub init_dirscan
+{
+    my( $self ) = @_;
+    install_share 't/share';
+    install_share module => 'My::Test' => 't/module';
+    shift->SUPER::init_dirscan( @_ );
+}
+
