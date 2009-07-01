@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/File-Sharedir-Install.t
+lib/File/Sharedir/Install.pm
