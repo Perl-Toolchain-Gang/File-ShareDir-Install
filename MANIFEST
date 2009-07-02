@@ -2,7 +2,7 @@ Changes
 Makefile.PL
 MANIFEST
 README
-lib/File/Sharedir/Install.pm
+lib/File/ShareDir/Install.pm
 t/module/again
 t/module/deeper/bonk
 t/module/bonk

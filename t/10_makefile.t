@@ -5,12 +5,17 @@ use warnings;
 
 use Config;
 
+use File::Path qw( rmtree );
 use Test::More ( tests => 15 );
 
 use ExtUtils::MakeMaker;
 
 my $FILE = 'test-Makefile';
-# END { $FILE and -f $FILE and unlink $FILE }
+rmtree( [ qw( tlib troot ) ], 0, 0 );
+END { 
+    $FILE and -f $FILE and unlink $FILE;
+    rmtree( [ qw( tlib troot ) ], 0, 0 );
+}
 
 use File::ShareDir::Install;
 

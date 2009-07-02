@@ -4,5 +4,5 @@ use strict;
 use warnings;
 
 use Test::More tests => 1;
-BEGIN { use_ok('File::Sharedir::Install') };
+BEGIN { use_ok('File::ShareDir::Install') };
 

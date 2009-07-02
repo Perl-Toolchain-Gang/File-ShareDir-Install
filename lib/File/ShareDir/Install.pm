@@ -9,7 +9,7 @@ use Carp;
 use File::Spec;
 use IO::Dir;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 our @DIRS;
 our %TYPES;
@@ -125,7 +125,7 @@ sub _CLASS ($) {
         and
         ! ref $_[0]
         and
-        $_[0] =~ m/^[^\W\d]\w*(?:::\w+)*\z/s
+        $_[0] =~ m/^[^\W\d]\w*(?:::\w+)*$/s
     ) ? $_[0] : undef;
 }
 
@@ -168,8 +168,9 @@ other source-control junk will be ignored.
     install_share dist => $dir;
     install_share module => $module, $dir;
 
-Causes all the files in C<$dir> to be installed into a per-dist or
-per-module share directory.  Must be called before L<WriteMakefile>.  
+Causes all the files in C<$dir> and its sub-directories.  to be installed
+into a per-dist or per-module share directory.  Must be called before
+L<WriteMakefile>.
 
 The first 2 forms are equivalent.
 
@@ -177,6 +178,18 @@ The files will be installed when you run C<make install>.
 
 To locate the files after installation so they can be used inside your
 module, see  L<File::ShareDir>.
+
+    my $dir = File::ShareDir::module_dir( $module );
+
+Note that if you make multiple calls to C<install_share> on different
+directories that contain the same filenames, the last of these calls takes
+precedence.  In other words, if you do:
+
+    install_share 'share1';
+    install_share 'share2';
+
+And both C<share1> and C<share2> contain a fill called C<info>, the file
+C<share2/info> will be installed into your C<dist_dir()>.
 
 =head2 postamble
 

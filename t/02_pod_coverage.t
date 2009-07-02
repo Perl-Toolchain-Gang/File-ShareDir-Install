@@ -9,11 +9,11 @@ plan skip_all => "Test::Pod::Coverage 1.00 required for testing POD coverage" if
 
 plan tests => 1;
 pod_coverage_ok(
-        "File::Sharedir::Install",
+        "File::ShareDir::Install",
         { also_private => [ 
 #                    qr/^(OH|SE)_.+$/,
 #                    qr/^(handler_for|instantiate|set_objectre)$/
                 ], 
         },
-        "File::Sharedir::Install, ignoring private functions",
+        "File::ShareDir::Install, ignoring private functions",
 );
