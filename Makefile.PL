@@ -3,8 +3,8 @@ use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
-    NAME              => 'File::Sharedir::Install',
-    VERSION_FROM      => 'lib/File/Sharedir/Install.pm', # finds $VERSION
+    NAME              => 'File::ShareDir::Install',
+    VERSION_FROM      => 'lib/File/ShareDir/Install.pm', # finds $VERSION
     LICENSE           => 'perl',
     dist=>{COMPRESS=>'gzip -9f', EXT=>'gz'},
 
