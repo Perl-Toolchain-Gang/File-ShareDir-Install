@@ -1,4 +1,8 @@
-Revision history for Perl extension File::Sharedir::Install.
+Revision history for Perl extension File::ShareDir::Install.
+
+0.02  Thu Jul  2
+    - Renamed to File::ShareDir::Install
+    - Tweak the doco
 
 0.01  Wed Jul  1
     - Initial release to the CPAN

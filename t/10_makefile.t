@@ -12,20 +12,20 @@ use ExtUtils::MakeMaker;
 my $FILE = 'test-Makefile';
 # END { $FILE and -f $FILE and unlink $FILE }
 
-use File::Sharedir::Install;
+use File::ShareDir::Install;
 
 install_share 't/share';
 install_share module => 'My::Test' => 't/module';
 
 WriteMakefile(
-    NAME              => 'File::Sharedir::Install',
-    VERSION_FROM      => 'lib/File/Sharedir/Install.pm',
+    NAME              => 'File::ShareDir::Install',
+    VERSION_FROM      => 'lib/File/ShareDir/Install.pm',
     INST_LIB          => 'tlib/lib',
     PREFIX            => 'troot',
     MAKEFILE          => $FILE,
     PREREQ_PM         => {},
     ($] >= 5.005 ?     
-      (ABSTRACT_FROM  => 'lib/File/Sharedir/Install.pm', 
+      (ABSTRACT_FROM  => 'lib/File/ShareDir/Install.pm', 
        AUTHOR         => 'Philip Gwyn <fil@localdomain>') : ()),
 );
 
@@ -49,7 +49,7 @@ ok( $content =~ m(t.module.deeper.bonk.+share.module.My-Test.deeper.bonk), "Shar
 #####
 mysystem( $Config{make}, '-f', $FILE );
 my $TOP = "tlib/lib/auto/share";
-ok( -f "$TOP/dist/File-Sharedir-Install/honk", "Copied to blib for dist" );
+ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
 ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
 ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
 ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );
@@ -69,7 +69,7 @@ unless( $content =~ m(INSTALLSITELIB = (.+)) ) {
 else {
     $TOP = "$1/auto/share";
     $TOP =~ s/\$\(SITEPREFIX\)/troot/;
-    ok( -f "$TOP/dist/File-Sharedir-Install/honk", "Copied to blib for dist" );
+    ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
     ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
     ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
     ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );
@@ -87,5 +87,5 @@ sub mysystem
 ###########################################################################
 package MY;
 
-use File::Sharedir::Install qw(postamble);
+use File::ShareDir::Install qw(postamble);
 
