@@ -22,6 +22,10 @@ use File::ShareDir::Install;
 install_share 't/share';
 install_share module => 'My::Test' => 't/module';
 
+
+delete $ENV{PERL_MM_OPT};   # local::lib + PREFIX below will FAIL
+# XXX maybe we should just remove INSTALL_BASE=[^ ]+ from PERL_MM_OPT?
+
 WriteMakefile(
     NAME              => 'File::ShareDir::Install',
     VERSION_FROM      => 'lib/File/ShareDir/Install.pm',
