@@ -1,5 +1,9 @@
 Revision history for Perl extension File::ShareDir::Install.
 
+0.03  Tue Sep  9 2009
+    - Drop PERL_MM_OPT in test so that it passes with local::lib
+        Thank you Peter Makholm
+
 0.02  Thu Jul  2
     - Renamed to File::ShareDir::Install
     - Tweak the doco
