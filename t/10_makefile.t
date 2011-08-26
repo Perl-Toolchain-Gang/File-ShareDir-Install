@@ -90,7 +90,7 @@ sub mysystem
     my $cmd = join ' ', @_;
     my $ret = qx($cmd 2>&1);
     return unless $?;
-    die $ret;
+    die "Error running $cmd: ?=$? ret=$ret";
 }
 
 ###########################################################################

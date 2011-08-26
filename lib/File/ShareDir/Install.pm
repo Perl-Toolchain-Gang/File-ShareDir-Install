@@ -9,7 +9,7 @@ use Carp;
 use File::Spec;
 use IO::Dir;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 our @DIRS;
 our %TYPES;
@@ -216,7 +216,7 @@ Philip Gwyn, E<lt>gwyn-AT-cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009 by Philip Gwyn
+Copyright (C) 2009-2011 by Philip Gwyn
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
