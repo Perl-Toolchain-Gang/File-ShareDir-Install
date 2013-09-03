@@ -16,7 +16,7 @@ our %TYPES;
 
 require Exporter;
 
-our @ISA = qw( Exporter);
+our @ISA = qw( Exporter );
 our @EXPORT = qw( install_share );
 our @EXPORT_OK = qw( postamble install_share );
 
@@ -71,7 +71,8 @@ sub __postamble_share_dir
                                     qw( auto share dist ), 
                                     '$(DISTNAME)'
                                   );
-    } else {
+    } 
+    else {
         my $module = $mod;
         $module =~ s/::/-/g;
         $idir = File::Spec->catdir( '$(INST_LIB)', 
@@ -156,9 +157,9 @@ File::ShareDir::Install allows you to install read-only data files from a
 distribution. It is a companion module to L<File::ShareDir>, which
 allows you to locate these files after installation.
 
-It is a port L<Module::Install::Share> to L<ExtUtils::MakeMaker> with the
-improvement of only installing the files you want; C<.svn> and
-other source-control junk will be ignored.
+It is a port of L<Module::Install::Share> to L<ExtUtils::MakeMaker> with the
+improvement of only installing the files you want; C<.svn> and other
+source-control junk will be ignored.
 
 =head1 EXPORT
 
@@ -168,7 +169,7 @@ other source-control junk will be ignored.
     install_share dist => $dir;
     install_share module => $module, $dir;
 
-Causes all the files in C<$dir> and its sub-directories.  to be installed
+Causes all the files in C<$dir> and its sub-directories to be installed
 into a per-dist or per-module share directory.  Must be called before
 L<WriteMakefile>.
 
@@ -194,7 +195,7 @@ C<share2/info> will be installed into your C<dist_dir()>.
 =head2 postamble
 
 Exported into the MY package.  Only documented here if you need to write your
-own postable.
+own postamble.
 
     package MY;
     use File::ShareDir::Install;
