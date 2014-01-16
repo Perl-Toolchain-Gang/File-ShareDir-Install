@@ -6,7 +6,7 @@ use warnings;
 use Config;
 
 use File::Path qw( rmtree );
-use Test::More ( tests => 15 );
+use Test::More ( tests => 16 );
 
 use ExtUtils::MakeMaker;
 
@@ -54,6 +54,8 @@ ok( $content =~ m(t.share.honk.+share.dist...DISTNAME..honk), "Shared by dist" )
 ok( $content =~ m(t.module.bonk.+share.module.My-Test.bonk), "Shared by module" );
 ok( $content =~ m(t.module.again.+share.module.My-Test.again), "Shared by module again" );
 ok( $content =~ m(t.module.deeper.bonk.+share.module.My-Test.deeper.bonk), "Shared by module in subdirectory" );
+
+ok( $content !~ m(t.share.\.something), "Don't share dot files" );
 
 #####
 mysystem( $Config{make}, '-f', $FILE );

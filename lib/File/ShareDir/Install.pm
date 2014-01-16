@@ -19,6 +19,8 @@ require Exporter;
 our @ISA = qw( Exporter );
 our @EXPORT = qw( install_share );
 our @EXPORT_OK = qw( postamble install_share );
+our $INCLUDE_DOTFILES = 0;
+our $INCLUDE_DOTDIRS = 0;
 
 #####################################################################
 sub install_share
@@ -37,13 +39,16 @@ sub install_share
     }
 
     push @DIRS, $dir;
-    $TYPES{$dir} = [ $type ];
+    $TYPES{$dir} = { type=>$type, 
+                     dotfiles => $INCLUDE_DOTFILES, 
+                     dotdirs => $INCLUDE_DOTDIRS
+                    };
     if( $type eq 'module' ) {
         my $module = _CLASS( $_[0] );
         unless ( defined $module ) {
             confess "Missing or invalid module name '$_[0]'";
         }
-        push @{ $TYPES{$dir} }, $module;
+        $TYPES{$dir}{module} = $module;
     }
 
 }
@@ -55,7 +60,7 @@ sub postamble
 
     my @ret; # = $self->SUPER::postamble( @_ );
     foreach my $dir ( @DIRS ) {
-        push @ret, __postamble_share_dir( $self, $dir, @{ $TYPES{ $dir } } );
+        push @ret, __postamble_share_dir( $self, $dir, $TYPES{ $dir } );
     }
     return join "\n", @ret;
 }
@@ -63,17 +68,17 @@ sub postamble
 #####################################################################
 sub __postamble_share_dir
 {
-    my( $self, $dir, $type, $mod ) = @_;
+    my( $self, $dir, $def ) = @_;
 
     my( $idir );
-    if ( $type eq 'dist' ) {
+    if ( $def->{type} eq 'dist' ) {
         $idir = File::Spec->catdir( '$(INST_LIB)', 
                                     qw( auto share dist ), 
                                     '$(DISTNAME)'
                                   );
     } 
     else {
-        my $module = $mod;
+        my $module = $def->{module};
         $module =~ s/::/-/g;
         $idir = File::Spec->catdir( '$(INST_LIB)', 
                                     qw( auto share module ), 
@@ -82,7 +87,7 @@ sub __postamble_share_dir
     }
 
     my $files = {};
-    _scan_share_dir( $files, $idir, $dir );
+    _scan_share_dir( $files, $idir, $dir, $def );
 
     my $autodir = '$(INST_LIB)';
     my $pm_to_blib = $self->oneliner(<<CODE, ['-MExtUtils::Install']);
@@ -102,16 +107,24 @@ CODE
 
 sub _scan_share_dir
 {
-    my( $files, $idir, $dir ) = @_;
+    my( $files, $idir, $dir, $def ) = @_;
     my $dh = IO::Dir->new( $dir ) or die "Unable to read $dir: $!";
     my $entry;
     while( defined( $entry = $dh->read ) ) {
-        next if $entry =~ /^\./ or $entry =~ /(~|,v)$/;
+        next if $entry =~ /(~|,v|#)$/;
         my $full = File::Spec->catfile( $dir, $entry );
         if( -f $full ) {
+            next if not $def->{dotfiles} and $entry =~ /^\./;
             $files->{ $full } = File::Spec->catfile( $idir, $entry );
         }
         elsif( -d $full ) {
+            if( $def->{dotdirs} ) {
+                next if $entry eq '.' or $entry eq '..' or 
+                        $entry =~ /^\.(svn|git|cvs)$/;
+            }
+            else {
+                next if $entry =~ /^\./;
+            }
             _scan_share_dir( $files, File::Spec->catdir( $idir, $entry ), $full );
         }
     }
@@ -158,8 +171,11 @@ distribution. It is a companion module to L<File::ShareDir>, which
 allows you to locate these files after installation.
 
 It is a port of L<Module::Install::Share> to L<ExtUtils::MakeMaker> with the
-improvement of only installing the files you want; C<.svn> and other
+improvement of only installing the files you want; C<.svn>, C<.git> and other
 source-control junk will be ignored.
+
+Please note that this module installs read-only data files; empty
+directories will be ignored.
 
 =head1 EXPORT
 
@@ -206,6 +222,43 @@ own postamble.
         # ... add more things to @ret;
         return join "\n", @ret;
     }
+
+=head1 CONFIGURATION
+
+2 variables control the handling of dot-files and dot-directories.
+
+A dot-file has a filename that starts with a period (.).  For example
+C<.htaccess> A dot-directory (or dot-dir) is a directory that starts with a
+period (.).  For example C<.config/>.  Not all OSes support the use of dot-files.
+
+=head2 $INCLUDE_DOTFILES
+
+If set to a true value, dot-files will be copied.  Default is false.  
+
+=head2 $INCLUDE_DOTDIRS
+
+If set to a true value, the files inside dot-directories will be copied. 
+Known version control directories are still ignored.  Default is false.
+
+=head2 Note
+
+These variables only influences subsequent calls to C<install_share()>.  This allows
+you to control the behaviour for each directory.  
+
+For example:
+
+    $INCLUDE_DOTDIRS = 1;
+    install_share 'share1';
+    $INCLUDE_DOTFILES = 1;
+    $INCLUDE_DOTDIRS = 0;
+    install_share 'share2';
+
+The directory C<share1> will have files in its dot-directories installed,
+but not dot-files.  The directory C<share2> will have files in its dot-files
+installed, but dot-directories will be ignored.
+
+
+
 
 =head1 SEE ALSO
 
