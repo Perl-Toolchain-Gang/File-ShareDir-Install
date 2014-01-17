@@ -16,3 +16,4 @@ t/module/deeper/bonk
 t/share/.dir/something
 t/share/.something
 t/share/honk
+t/12_delete.t
