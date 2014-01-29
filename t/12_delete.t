@@ -11,10 +11,10 @@ use Test::More ( tests => 7 );
 use ExtUtils::MakeMaker;
 
 my $FILE = "test-$$-Makefile";
-rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
+rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
 END { 
     $FILE and -f $FILE and unlink $FILE;
-    rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
+    rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
 }
 
 use File::ShareDir::Install;
