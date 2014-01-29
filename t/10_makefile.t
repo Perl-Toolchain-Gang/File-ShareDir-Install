@@ -10,11 +10,11 @@ use Test::More ( tests => 16 );
 
 use ExtUtils::MakeMaker;
 
-my $FILE = 'test-Makefile';
-rmtree( [ qw( tlib troot ) ], 0, 0 );
+my $FILE = "test-$$-Makefile";
+rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
 END { 
     $FILE and -f $FILE and unlink $FILE;
-    rmtree( [ qw( tlib troot ) ], 0, 0 );
+    rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
 }
 
 use File::ShareDir::Install;
@@ -29,8 +29,8 @@ delete $ENV{PERL_MM_OPT};   # local::lib + PREFIX below will FAIL
 WriteMakefile(
     NAME              => 'File::ShareDir::Install',
     VERSION_FROM      => 'lib/File/ShareDir/Install.pm',
-    INST_LIB          => 'tlib/lib',
-    PREFIX            => 'troot',
+    INST_LIB          => "tlib-$$/lib",
+    PREFIX            => "troot-$$",
     MAKEFILE          => $FILE,
     PREREQ_PM         => {},
     ($] >= 5.005 ?     
@@ -59,7 +59,7 @@ ok( $content !~ m(t.share.\.something), "Don't share dot files" );
 
 #####
 mysystem( $Config{make}, '-f', $FILE );
-my $TOP = "tlib/lib/auto/share";
+my $TOP = "tlib-$$/lib/auto/share";
 ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
 ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
 ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
@@ -79,7 +79,7 @@ unless( $content =~ m(INSTALLSITELIB = (.+)) ) {
 }
 else {
     $TOP = "$1/auto/share";
-    $TOP =~ s/\$\(SITEPREFIX\)/troot/;
+    $TOP =~ s/\$\(SITEPREFIX\)/troot-$$/;
     ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
     ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
     ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );

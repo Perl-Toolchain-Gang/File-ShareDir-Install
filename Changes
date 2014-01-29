@@ -1,5 +1,9 @@
 Revision history for Perl extension File::ShareDir::Install.
 
+0.08  Jan 29 2015
+    - Tests may now be run in parallel
+        Thank you KENTNL@cpan.org
+
 0.07  Jan 17 2014
     - Added delete_share
         Thank you dmuey@cpan.org

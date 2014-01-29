@@ -10,11 +10,11 @@ use Test::More ( tests => 7 );
 
 use ExtUtils::MakeMaker;
 
-my $FILE = 'test-Makefile';
-rmtree( [ qw( tlib troot ) ], 0, 0 );
+my $FILE = "test-$$-Makefile";
+rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
 END { 
     $FILE and -f $FILE and unlink $FILE;
-    rmtree( [ qw( tlib troot ) ], 0, 0 );
+    rmtree( [ qw( tlib-$$ troot-$$ ) ], 0, 0 );
 }
 
 use File::ShareDir::Install;
@@ -30,8 +30,8 @@ delete $ENV{PERL_MM_OPT};   # local::lib + PREFIX below will FAIL
 WriteMakefile(
     NAME              => 'File::ShareDir::Install',
     VERSION_FROM      => 'lib/File/ShareDir/Install.pm',
-    INST_LIB          => 'tlib/lib',
-    PREFIX            => 'troot',
+    INST_LIB          => "tlib-$$/lib",
+    PREFIX            => "troot-$$",
     MAKEFILE          => $FILE,
     PREREQ_PM         => {},
     ($] >= 5.005 ?     
@@ -60,7 +60,7 @@ ok( $content =~ /RM_RF.+dist...DISTNAME..honk/, "Remove from per-dist" )
 
 #####
 mysystem( $Config{make}, '-f', $FILE );
-my $TOP = "tlib/lib/auto/share";
+my $TOP = "tlib-$$/lib/auto/share";
 ok( -f "$TOP/module/My-Test/bonk", "Installed this file" );
 ok( !-f "$TOP/module/My-Test/again", "Removed this file" );
 ok( !-d "$TOP/dist/File-ShareDir-Install/deeper", "Removed a directory" );
