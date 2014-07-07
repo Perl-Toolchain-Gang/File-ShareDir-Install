@@ -1,6 +1,11 @@
 Revision history for Perl extension File::ShareDir::Install.
 
-0.08  Jan 29 2015
+0.09  Jul 7 2014
+    - Get rid of DB::single 
+        Thank you 
+    - Don't do POD tests
+
+0.08  Jan 29 2014
     - Tests may now be run in parallel
         Thank you KENTNL@cpan.org
 

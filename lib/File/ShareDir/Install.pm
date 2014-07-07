@@ -9,7 +9,7 @@ use Carp;
 use File::Spec;
 use IO::Dir;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 our @DIRS;
 our %ALREADY;
@@ -134,7 +134,6 @@ sub __postamble_share_dir
 
     my $dir = $def->{dir};
 
-    $DB::single = 1;
     my( $idir );
 
     if( $def->{type} eq 'delete-dist' ) {
