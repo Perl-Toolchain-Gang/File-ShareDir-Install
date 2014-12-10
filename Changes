@@ -1,5 +1,9 @@
 Revision history for Perl extension File::ShareDir::Install.
 
+0.10  Dec 10 2014
+    - Recurse with $def in _scan_share_dir
+        Thank you KENTNL for rt95749
+
 0.09  Jul 7 2014
     - Get rid of DB::single 
         Thank you djerius@cpan.org
