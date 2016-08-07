@@ -1,4 +1,5 @@
 package File::ShareDir::Install;
+# ABSTRACT: Install shared files
 
 use 5.008;
 use strict;
@@ -236,9 +237,7 @@ sub _CLASS ($) {
 1;
 __END__
 
-=head1 NAME
-
-File::ShareDir::Install - Install shared files
+=pod
 
 =head1 SYNOPSIS
 
@@ -384,24 +383,8 @@ The directory C<share1> will have files in its dot-directories installed,
 but not dot-files.  The directory C<share2> will have files in its dot-files
 installed, but dot-directories will be ignored.
 
-
-
-
 =head1 SEE ALSO
 
 L<File::ShareDir>, L<Module::Install>.
-
-=head1 AUTHOR
-
-Philip Gwyn, E<lt>gwyn-AT-cpan.orgE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2009-2014 by Philip Gwyn
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.8 or,
-at your option, any later version of Perl 5 you may have available.
-
 
 =cut

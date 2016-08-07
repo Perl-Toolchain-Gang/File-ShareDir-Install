@@ -1,4 +1,7 @@
-Revision history for Perl extension File::ShareDir::Install.
+Revision history for File-ShareDir-Install.
+
+{{$NEXT}}
+    - release with new tooling, from the Perl-Toolchain-Gang organization
 
 0.10  2014-12-10
     - Recurse with $def in _scan_share_dir
