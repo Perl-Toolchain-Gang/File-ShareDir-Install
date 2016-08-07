@@ -248,7 +248,7 @@ __END__
     install_share dist => 'dist-share';
     install_share module => 'My::Module' => 'other-share';
 
-    WriteMakefile( ... );       # As you normaly would
+    WriteMakefile( ... );       # As you normally would
 
     package MY;
     use File::ShareDir::Install qw(postamble);
@@ -330,7 +330,7 @@ You can also selectively remove some files from installation.
 
 =head2 postamble
 
-This function must be exported into the MY package.  You will normaly do this
+This function must be exported into the MY package.  You will normally do this
 with the following.
 
     package MY;
@@ -350,10 +350,10 @@ If you need to overload postamble, use the following.
 
 =head1 CONFIGURATION
 
-2 variables control the handling of dot-files and dot-directories.
+Two variables control the handling of dot-files and dot-directories.
 
 A dot-file has a filename that starts with a period (.).  For example
-C<.htaccess>. A dot-directory (or dot-dir) is a directory that starts with a
+C<.htaccess>. A dot-directory is a directory that starts with a
 period (.).  For example C<.config/>.  Not all filesystems support the use
 of dot-files.
 
