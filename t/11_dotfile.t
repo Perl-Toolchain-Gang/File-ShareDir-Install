@@ -2,11 +2,13 @@ use strict;
 use warnings;
 
 use Config;
-
 use File::Path qw( rmtree );
-use Test::More ( tests => 9 );
-
+use Test::More;
 use ExtUtils::MakeMaker;
+
+plan skip_all => 'This test requires a Makefile in the built distribution' if not -f 'Makefile';
+
+plan tests => 9;
 
 my $FILE = "test-$$-Makefile";
 rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
