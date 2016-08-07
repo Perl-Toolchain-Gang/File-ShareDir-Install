@@ -12,7 +12,7 @@ plan tests => 9;
 
 my $FILE = "test-$$-Makefile";
 rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
-END { 
+END {
     $FILE and -f $FILE and unlink $FILE;
     rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
 }
@@ -36,8 +36,8 @@ WriteMakefile(
     PREFIX            => "troot-$$",
     MAKEFILE          => $FILE,
     PREREQ_PM         => {},
-    ($] >= 5.005 ?     
-      (ABSTRACT_FROM  => 'lib/File/ShareDir/Install.pm', 
+    ($] >= 5.005 ?
+      (ABSTRACT_FROM  => 'lib/File/ShareDir/Install.pm',
        AUTHOR         => 'Philip Gwyn <fil@localdomain>') : ()),
 );
 
