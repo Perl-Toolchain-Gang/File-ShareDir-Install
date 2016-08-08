@@ -1,5 +1,7 @@
 Revision history for File-ShareDir-Install.
 
+{{$NEXT}}
+
 0.11      2016-08-08 02:50:03Z
     - release with new tooling, from the Perl-Toolchain-Gang organization
 

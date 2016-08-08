@@ -10,7 +10,7 @@ use Carp;
 use File::Spec;
 use IO::Dir;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 our @DIRS;
 our %ALREADY;
