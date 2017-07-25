@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 
 plan skip_all => 'This test requires a Makefile in the built distribution' if not -f 'Makefile';
 
-plan tests => 16;
+plan tests => 19;
 
 my $FILE = "test-$$-Makefile";
 rmtree( [ "tlib-$$", "troot-$$" ], 0, 0 );
@@ -50,10 +50,11 @@ sub slurp
 #####
 ok( -f $FILE, "Created $FILE" );
 my $content = slurp $FILE;
-ok( $content =~ m(t.share.honk.+share.dist...DISTNAME..honk), "Shared by dist" );
-ok( $content =~ m(t.module.bonk.+share.module.My-Test.bonk), "Shared by module" );
-ok( $content =~ m(t.module.again.+share.module.My-Test.again), "Shared by module again" );
-ok( $content =~ m(t.module.deeper.bonk.+share.module.My-Test.deeper.bonk), "Shared by module in subdirectory" );
+ok( $content =~ m('t.share.honk.+share.dist...DISTNAME..honk'), "Shared by dist" );
+ok( $content =~ m('t.share.honk.+share.dist...DISTNAME..honk\slouder'), "Shared by dist as well" );
+ok( $content =~ m('t.module.bonk.+share.module.My-Test.bonk'), "Shared by module" );
+ok( $content =~ m('t.module.again.+share.module.My-Test.again'), "Shared by module again" );
+ok( $content =~ m('t.module.deeper.bonk.+share.module.My-Test.deeper.bonk'), "Shared by module in subdirectory" );
 
 ok( $content !~ m(t.share.\.something), "Don't share dot files" );
 
@@ -61,6 +62,7 @@ ok( $content !~ m(t.share.\.something), "Don't share dot files" );
 mysystem( $Config{make}, '-f', $FILE );
 my $TOP = "tlib-$$/lib/auto/share";
 ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
+ok( -f "$TOP/dist/File-ShareDir-Install/honk louder", "Copied to blib for dist as well" );
 ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
 ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
 ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );
@@ -81,6 +83,7 @@ else {
     $TOP = "$1/auto/share";
     $TOP =~ s/\$\(SITEPREFIX\)/troot-$$/;
     ok( -f "$TOP/dist/File-ShareDir-Install/honk", "Copied to blib for dist" );
+    ok( -f "$TOP/dist/File-ShareDir-Install/honk louder", "Copied to blib for dist as well" );
     ok( -f "$TOP/module/My-Test/bonk", "Copied to blib for module" );
     ok( -f "$TOP/module/My-Test/again", "Copied to blib for module again" );
     ok( -f "$TOP/module/My-Test/deeper/bonk", "Copied to blib for module, in subdir" );

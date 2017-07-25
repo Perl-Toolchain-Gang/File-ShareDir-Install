@@ -162,7 +162,7 @@ CODE
 
         my $files = {};
         _scan_share_dir( $files, $idir, $dir, $def );
-        @cmds = $self->split_command( $pm_to_blib, %$files );
+        @cmds = $self->split_command( $pm_to_blib, map {"'$_'"} %$files );
     }
 
     my $r = join '', map { "\t\$(NOECHO) $_\n" } @cmds;
