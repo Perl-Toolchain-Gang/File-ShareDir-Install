@@ -5,7 +5,7 @@ use 5.008;
 use strict;
 use warnings;
 
-use Carp;
+use Carp ();
 
 use File::Spec;
 use IO::Dir;
@@ -30,11 +30,11 @@ sub install_share
     my $type = @_ ? shift : 'dist';
     unless ( defined $type and
             ( $type =~ /^(module|dist)$/ ) ) {
-        confess "Illegal or invalid share dir type '$type'";
+        Carp::confess "Illegal or invalid share dir type '$type'";
     }
 
     if( $type eq 'dist' and @_ ) {
-        confess "Too many parameters to install_share";
+        Carp::confess "Too many parameters to install_share";
     }
 
     my $def = _mk_def( $type );
@@ -51,11 +51,11 @@ sub delete_share
     my $type = @_ ? shift : 'dist';
     unless ( defined $type and
             ( $type =~ /^(module|dist)$/ ) ) {
-        confess "Illegal or invalid share dir type '$type'";
+        Carp::confess "Illegal or invalid share dir type '$type'";
     }
 
     if( $type eq 'dist' and @_ ) {
-        confess "Too many parameters to delete_share";
+        Carp::confess "Too many parameters to delete_share";
     }
 
     my $def = _mk_def( "delete-$type" );
@@ -84,7 +84,7 @@ sub _add_module
     if( $def->{type} =~ /module$/ ) {
         my $module = _CLASS( $class );
         unless ( defined $module ) {
-            confess "Missing or invalid module name '$_[0]'";
+            Carp::confess "Missing or invalid module name '$_[0]'";
         }
         $def->{module} = $module;
     }
@@ -104,10 +104,10 @@ sub _add_dir
 
     foreach my $d ( @$dir ) {
         unless ( $del or (defined $d and -d $d) ) {
-            confess "Illegal or missing directory '$d'";
+            Carp::confess "Illegal or missing directory '$d'";
         }
         if( not $del and $ALREADY{ $d }++ ) {
-            confess "Directory '$d' is already being installed";
+            Carp::confess "Directory '$d' is already being installed";
         }
         push @DIRS, { %$def };
         $DIRS[-1]{dir} = $d;
