@@ -1,6 +1,6 @@
 Revision history for File-ShareDir-Install.
 
-{{$NEXT}}
+0.12      2018-04-20 11:00:09Z
     - add rules files for 'prove' and Test::Harness to specify that tests need
       to be run serially for now
     - support spaces (and other special characters too) in share files (PR #2;
