@@ -276,7 +276,7 @@ directories will be ignored.
 
 Causes all the files in C<$dir> and its sub-directories to be installed
 into a per-dist or per-module share directory.  Must be called before
-L<WriteMakefile>.
+C<WriteMakefile>.
 
 The first 2 forms are equivalent; the files are installed in a per-distribution
 directory.  For example C</usr/lib/perl5/site_perl/auto/share/dist/My-Dist>.  The
