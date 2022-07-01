@@ -1,6 +1,7 @@
 Revision history for File-ShareDir-Install.
 
 {{$NEXT}}
+    - work around a build issue on windows (RT#125571)
 
 0.13      2018-04-22 08:19:00Z
     - re-instate testrules.yml file to force serialize testing
